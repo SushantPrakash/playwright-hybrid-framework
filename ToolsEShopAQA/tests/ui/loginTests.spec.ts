@@ -2,11 +2,9 @@ import {test, expect} from '@playwright/test';
 
 test.describe("Login Test Scenarios",()=>{
     test.beforeEach(async ({page})=>{
-        page.goto("https://practicesoftwaretesting.com/");
-    })
-
-    test("Validate Landing Page when not logged in",async ({page})=>{
+        await page.goto("https://practicesoftwaretesting.com/");
         await expect(page.getByTitle("Practice Software Testing - Toolshop")).toBeVisible();
+
     })
 
     test("Validate login using valid credentials", async ({page})=>{
