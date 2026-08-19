@@ -1,27 +1,26 @@
 import {test, expect} from '@playwright/test';
+import { BasePage } from '../../src/pages/basePage.js';
+import {LoginPage} from '../../src/pages/loginPage.js';
+import {HeaderSection} from '../../src/pages/headerSection.js';
 
 test.describe("Login Test Scenarios",()=>{
     test.beforeEach(async ({page})=>{
-        await page.goto("https://practicesoftwaretesting.com/");
-        await expect(page.getByTitle("Practice Software Testing - Toolshop")).toBeVisible();
+        const basePage = new BasePage(page);
+        await basePage.open("https://practicesoftwaretesting.com/");
+        const headerSection = new HeaderSection(page);
+        await headerSection.goToSignInPage();
 
     })
 
     test("Validate login using valid credentials", async ({page})=>{
-        await page.getByTestId("nav-sign-in").click();
-        await expect(page.getByRole('heading',{name:'Login'})).toBeVisible();
-        await page.getByTestId('email').fill("customer3@practicesoftwaretesting.com");
-        await page.getByTestId('password').fill("pass123");
-        await page.getByTestId('login-submit').click();
+        const login = new LoginPage(page);
+        await login.login("customer@practicesoftwaretesting.com","welcome01");
         await expect(page.getByTestId('page-title')).toHaveText('My account');
     })
 
     test("Validate invalid login using wrong credentials", async ({page})=>{
-        await page.getByTestId("nav-sign-in").click();
-        await expect(page.getByRole('heading',{name:'Login'})).toBeVisible();
-        await page.getByTestId('email').fill("customer4@practicesoftwaretesting.com");
-        await page.getByTestId('password').fill("passKey123");
-        await page.getByTestId('login-submit').click();
-        await expect(page.getByTestId('login-error')).toHaveText('Invalid email or password');
+        const login = new LoginPage(page);
+        await login.login("customer6@practicesoftwaretesting.com","passKey123");
+        await expect(login.errorMessage).toHaveText('Invalid email or password');
     })
 })

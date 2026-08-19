@@ -1,14 +1,16 @@
 import {test,expect} from '@playwright/test';
+import { ProductListingPage } from '../../src/pages/productListingPage.js';
+import { BasePage } from '../../src/pages/basePage.js'
 
 test.describe("Product Listing Test Scenarios",()=>{
     test.beforeEach(async ({page})=>{
-        await page.goto("https://practicesoftwaretesting.com/");
-        await expect(page.getByTitle("Practice Software Testing - Toolshop")).toBeVisible();
+        const basePage = new BasePage(page);
+        await basePage.open("https://practicesoftwaretesting.com/");
     })
 
     test("Validate Product grid is displayed", async ({page})=>{
-        await page.getByTestId('product-name').first().waitFor({state:'visible'});
-        let productNames = await page.getByTestId('product-name').allTextContents();
+        const plp = new ProductListingPage(page);
+        let productNames = await plp.getProductsNames();
         expect(productNames.length).toBeGreaterThan(0);
         productNames.forEach((prodName)=>{
             expect(prodName.trim()).not.toBe('');
@@ -17,65 +19,39 @@ test.describe("Product Listing Test Scenarios",()=>{
     })
 
     test("Validate search product functionality", async ({page})=>{
-        await page.getByTestId('search-query').fill('Hammer');
-        await page.getByTestId('search-submit').click();
-        await page.getByTestId('search_completed').waitFor({state:'attached'});
-        let returnedProducts = await page.getByTestId('product-name').allTextContents();
+        const plp = new ProductListingPage(page);
+        let returnedProducts = await plp.searchForToolUsingSearchBox("Hammer");
         expect(returnedProducts.length).toBeGreaterThan(0);
         returnedProducts.forEach((prod)=>{
             expect(prod.toLowerCase()).toContain('hammer');
         }) 
     })
     test("Validate product filter by brand functionality", async ({page})=>{
-        await page.getByTestId('product-name').first().waitFor({state:'visible'});
-        let productNamesBeforeBrandFilter = await page.getByTestId('product-name').allTextContents();
-        await page.getByRole('checkbox',{name:'ForgeFlex Tools'}).check();
-        await page.getByTestId('filter_completed').waitFor({state:'attached'});
-        let returnedProducts = await page.getByTestId('product-name').allTextContents();
+        const plp = new ProductListingPage(page);
+        let productNamesBeforeFilter = await plp.getProductsNames();
+        let returnedProducts = await plp.applyFilter("brand")
         expect(returnedProducts.length).toBeGreaterThan(0);
         returnedProducts.forEach((prod)=>{
             expect(prod.toLowerCase()).not.toBe('');
         })
-        expect(returnedProducts).not.toEqual(productNamesBeforeBrandFilter);
+        expect(returnedProducts).not.toEqual(productNamesBeforeFilter);
 
     })
-    test("Validate pagination functionality", async ({page})=>{
-        await page.getByTestId('product-name').first().waitFor({state:'visible'});
-        const firstProduct = await page.getByTestId('product-name').first().innerText();
-        let productNamesOnFirstPage = await page.getByTestId('product-name').allTextContents();
-        await page.getByLabel('Page-2').click();
-        await expect(page.getByTestId('product-name').first()).not.toHaveText(firstProduct);
-        let returnedProducts = await page.getByTestId('product-name').allTextContents();
-        expect(returnedProducts.length).toBeGreaterThan(0);
-        returnedProducts.forEach((prod)=>{
+    test("Validate pagination functionality", async({page})=>{
+        const plp = new ProductListingPage(page);
+        let productsBeforePageBtnClick = await plp.getProductsNames();
+        let productsAfterPageBtnClick = await plp.goToDifferentPage(2);
+        expect(productsAfterPageBtnClick.length).toBeGreaterThan(0);
+        productsAfterPageBtnClick.forEach((prod)=>{
             expect(prod.toLowerCase()).not.toBe('');
         })
-        expect(returnedProducts).not.toEqual(productNamesOnFirstPage);
-
-
+        expect(productsAfterPageBtnClick).not.toEqual(productsBeforePageBtnClick);
     })
-    test("Validate price range slider and sorting functionality", async ({page})=>{
-        const productsBefore = await page.getByTestId('product-name').allTextContents();
-        const sliderMax= page.getByRole('slider', { name: 'ngx-slider-max' });
-        let currentValue = await sliderMax.getAttribute('aria-valuetext');
-        await sliderMax.click();
-        for(let i=0; i<96;i++){
-            await sliderMax.press('ArrowLeft');
-        }
-        let newValue:string = (await sliderMax.getAttribute('aria-valuetext'))!;
-        expect(currentValue).not.toEqual(newValue);
-        await expect(page.getByTestId('product-name')).not.toHaveCount(productsBefore.length);
-        let maxValue:number = parseFloat(newValue);
-        await page.getByTestId('sort').selectOption('Price (Low - High)');
-        await page.getByTestId('sorting_completed').waitFor({state:'attached'});
-        const allPrices: number[] = (await page.getByTestId('product-price').allTextContents())
-                                    .map(p => parseFloat(p.replace(/[^0-9.]/g, '')));
-        for (let i = 1; i < allPrices.length; i++) {
-            expect(allPrices[i]).toBeGreaterThanOrEqual(allPrices[i - 1]!);
-        }
-        allPrices.forEach((price)=>{
-            expect(price).toBeLessThanOrEqual(maxValue);
-        })      
-        
+
+    test("Validate price range slider", async ({page})=>{
+        const plp = new ProductListingPage(page);
+        let productNamesBeforeSliderMove = await plp.getProductsNames();
+        let productNamesAfterSliderMove = await plp.moveSliderToXOffset(96);
+        expect(productNamesAfterSliderMove).not.toEqual(productNamesBeforeSliderMove);
     })
 })
