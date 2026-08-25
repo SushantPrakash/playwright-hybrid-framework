@@ -1,10 +1,7 @@
-import {test, expect} from '@playwright/test';
+import {test, expect} from '../../src/fixtures/pages.fixture.js';
 import { faker } from '@faker-js/faker';
 import { BasePage } from '../../src/pages/basePage.js'
-import { ProductDetailPage } from '../../src/pages/productDetailPage.js'
-import { ProductListingPage } from '../../src/pages/productListingPage.js'
-import { HeaderSection } from '../../src/pages/headerSection.js';
-import { CheckoutPage } from '../../src/pages/checkoutSystem/checkoutPage.js'
+
 
 test.describe("Cart and Checkout Test Scenarios",()=>{
     test.beforeEach(async ({page})=>{
@@ -12,69 +9,55 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await basePage.open("https://practicesoftwaretesting.com/");
     })
 
-    test('Add product to Cart', async({page})=>{
-        const plp = new ProductListingPage(page);
-        const pdp = new ProductDetailPage(page);
-        const headerSection = new HeaderSection(page);
-        const checkout = new CheckoutPage(page);
+    test('Add product to Cart', async({plp,pdp,header,checkout})=>{
+        
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
         await plp.clickOnProduct(productName);
         await pdp.validateProductDetail(productName,itemPrice);
         await pdp.addToCart();
         await pdp.addToCartAlertIsVisible();
-        await headerSection.cartIconDisplaysProductAdded();
-        await headerSection.gotToCart();
+        await header.cartIconDisplaysProductAdded();
+        await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
     })
     
-    test("Update quantity of product in cart", async ({page})=>{
-        const plp = new ProductListingPage(page);
-        const pdp = new ProductDetailPage(page);
-        const headerSection = new HeaderSection(page);
-        const checkout = new CheckoutPage(page);
+    test("Update quantity of product in cart", async ({plp,pdp,header,checkout})=>{
+        
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
         await plp.clickOnProduct(productName);
         await pdp.validateProductDetail(productName,itemPrice);
         await pdp.addToCart();
         await pdp.addToCartAlertIsVisible();
-        await headerSection.cartIconDisplaysProductAdded();
-        await headerSection.gotToCart();
+        await header.cartIconDisplaysProductAdded();
+        await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.cart.updateQuantity(2);
         await expect(checkout.cart.productQuantity).toHaveValue('2');
     })
-    test("Remove product from cart", async ({page})=>{
-        const plp = new ProductListingPage(page);
-        const pdp = new ProductDetailPage(page);
-        const headerSection = new HeaderSection(page);
-        const checkout = new CheckoutPage(page);
+    test("Remove product from cart", async ({plp,pdp,header,checkout})=>{
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
         await plp.clickOnProduct(productName);
         await pdp.validateProductDetail(productName,itemPrice);
         await pdp.addToCart();
         await pdp.addToCartAlertIsVisible();
-        await headerSection.cartIconDisplaysProductAdded();
-        await headerSection.gotToCart();
+        await header.cartIconDisplaysProductAdded();
+        await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.cart.deleteProductFromCart();
     })
-    test("Validate guest checkout process", async ({page})=>{
-        const plp = new ProductListingPage(page);
-        const pdp = new ProductDetailPage(page);
-        const headerSection = new HeaderSection(page);
-        const checkout = new CheckoutPage(page);
-
+    test("Validate guest checkout process", async ({plp,pdp,header,checkout})=>{
+       
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
         await plp.clickOnProduct(productName);
         await pdp.validateProductDetail(productName,itemPrice);
         await pdp.addToCart();
         await pdp.addToCartAlertIsVisible();
-        await headerSection.cartIconDisplaysProductAdded();
-        await headerSection.gotToCart();
+        await header.cartIconDisplaysProductAdded();
+        await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
         const firstName = faker.person.firstName();
@@ -95,20 +78,16 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         // expect(orderConfirmationText).toContain('Thanks for your order! Your invoice number is');
 
     })
-    test.only("Validate login checkout process", async ({page})=>{
-        const plp = new ProductListingPage(page);
-        const pdp = new ProductDetailPage(page);
-        const headerSection = new HeaderSection(page);
-        const checkout = new CheckoutPage(page);
-
+    test("Validate login checkout process", async ({plp,pdp,header,checkout})=>{
+        
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
         await plp.clickOnProduct(productName);
         await pdp.validateProductDetail(productName,itemPrice);
         await pdp.addToCart();
         await pdp.addToCartAlertIsVisible();
-        await headerSection.cartIconDisplaysProductAdded();
-        await headerSection.gotToCart();
+        await header.cartIconDisplaysProductAdded();
+        await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
         const email = "customer2@practicesoftwaretesting.com";
