@@ -22,10 +22,12 @@ export class BillingAddress{
 
     async enterBillingAddressDetails(country: string, zipCode: string, houseNumber: string){
         await expect(this.country).toBeEnabled();
+        await this.country.click();
         await this.country.selectOption(country);
-        await this.zipCode.pressSequentially(zipCode);
         await this.zipCode.press('Tab');
-        await this.houseNumber.pressSequentially(houseNumber);
+        await this.zipCode.fill(zipCode);
+        await this.zipCode.press('Tab');
+        await this.houseNumber.fill(houseNumber);
         await this.zipCode.press('Tab');
         }
 }

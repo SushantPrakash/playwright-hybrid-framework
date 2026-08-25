@@ -19,11 +19,12 @@ export class CheckoutPage{
         this.billingAddress = new BillingAddress(page);
         this.cart = new Cart(page);
         this.paymentSection = new PaymentSection(page);
-        this.proceedToCheckoutBtn = page.getByRole('button',{name:'Proceed to checkout'});
+        this.proceedToCheckoutBtn = page.getByRole('button',{name:'Proceed to checkout '});
         this.orderConfirmMsg = page.locator('#order-confirmation');
     }
     
     async clickProceedToCheckoutBtn(){
+        await expect(this.proceedToCheckoutBtn).toBeEnabled();
         await this.proceedToCheckoutBtn.click();
     }
 
