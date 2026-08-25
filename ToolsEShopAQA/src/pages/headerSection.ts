@@ -31,4 +31,8 @@ export class HeaderSection{
         await expect(this.cartIcon).toBeVisible();
         await expect(this.cartQuantity).toHaveText('1');
     }
+
+    async gotToCart(){
+        await this.cartIcon.click();
+    }
 }

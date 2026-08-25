@@ -2,8 +2,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 export class ProductDetailPage {
     readonly page: Page;
-    readonly productNameLoc: Locator;
-    readonly productPriceLoc: Locator;
+    readonly productName: Locator;
+    readonly productPrice: Locator;
     readonly addToCartBtn: Locator;
     readonly addToFavoritesBtn: Locator;
     readonly addedToCartAlert: Locator;
@@ -13,8 +13,8 @@ export class ProductDetailPage {
 
     constructor(page: Page) {
         this.page = page;
-        this.productNameLoc = page.getByTestId('product-name');
-        this.productPriceLoc = page.getByTestId('unit-price');
+        this.productName = page.getByTestId('product-name');
+        this.productPrice = page.getByTestId('unit-price');
         this.addToCartBtn = page.getByRole('button', { name: 'Add to cart' });
         this.addToFavoritesBtn = page.getByTestId('add-to-favorites');
         this.addedToCartAlert = page.getByRole('alert', { name: 'Product added to shopping cart.' });
@@ -24,8 +24,8 @@ export class ProductDetailPage {
 
     async validateProductDetail(productName: string, productPrice: string) {
         await this.page.waitForURL("**/product/**");
-        await expect(this.productNameLoc).toHaveText(productName);
-        await expect(this.productPriceLoc).toHaveText(productPrice.substring(1));
+        await expect(this.productName).toHaveText(productName);
+        await expect(this.productPrice).toHaveText(productPrice.substring(1));
         await expect(this.productSpecRow).toHaveCount(5);
 
     }
