@@ -1,11 +1,9 @@
-import {test, expect} from '../../src/fixtures/pages.fixture.js';
+import {test, expect} from '@fixtures/base.fixture.js';
 import { faker } from '@faker-js/faker';
-import { BasePage } from '../../src/pages/basePage.js'
 
 
 test.describe("Cart and Checkout Test Scenarios",()=>{
-    test.beforeEach(async ({page})=>{
-        const basePage = new BasePage(page);
+    test.beforeEach(async ({basePage})=>{
         await basePage.open("https://practicesoftwaretesting.com/");
     })
 

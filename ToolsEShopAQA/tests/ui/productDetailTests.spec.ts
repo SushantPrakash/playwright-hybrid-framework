@@ -1,9 +1,7 @@
-import {test, expect} from '../../src/fixtures/pages.fixture.js';
-import { BasePage } from '../../src/pages/basePage.js'
+import {test, expect} from '@fixtures/base.fixture.js';
 
 test.describe("Product Detail Test Scenarios",()=>{
-    test.beforeEach(async ({page})=>{
-        const basePage = new BasePage(page);
+    test.beforeEach(async ({basePage})=>{
         await basePage.open("https://practicesoftwaretesting.com/");
     })
 
