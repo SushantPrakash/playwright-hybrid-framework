@@ -1,5 +1,11 @@
 import {expect, type Locator, type Page} from '@playwright/test';
 
+type Address ={
+    country: string;
+    pincode: string;
+    house: string;
+}
+
 export class BillingAddress{
     readonly page: Page;
     readonly country: Locator;
@@ -20,14 +26,14 @@ export class BillingAddress{
         this.state = page.getByTestId('state');  
     }
 
-    async enterBillingAddressDetails(country: string, zipCode: string, houseNumber: string){
+    async enterBillingAddressDetails(address:Address){
+        
         await expect(this.country).toBeEnabled();
         await this.country.click();
-        await this.country.selectOption(country);
-        await this.zipCode.press('Tab');
-        await this.zipCode.fill(zipCode);
-        await this.zipCode.press('Tab');
-        await this.houseNumber.fill(houseNumber);
-        await this.zipCode.press('Tab');
-        }
+        await this.country.selectOption(address.country,{timeout:2000});
+        await this.zipCode.fill(address.pincode,{timeout:2000});
+        await this.houseNumber.fill(address.house,{timeout:2000});
+        await expect(this.state).not.toBeEmpty();
+        
+    }
 }

@@ -8,5 +8,6 @@ export class Login extends LoginPage {
 
     async validateLoginSuccessMsg(){
         await expect(this.page.getByText('you are already logged in. You can proceed to checkout.')).toBeVisible();
+        
     }
 }

@@ -63,20 +63,18 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         const buyerEmail = faker.internet.email({ firstName, lastName });
         await checkout.signInSection.continueAsGuest(buyerEmail,firstName,lastName);
         await checkout.clickProceedToCheckoutBtn();
-        await checkout.billingAddress.enterBillingAddressDetails(
-            "United States of America (the)",
-            "10011",
-            "23"
-        )
+        const address = {
+            country:"United States of America (the)",
+            pincode:"10011",
+            house:"23"
+        }
+        await checkout.billingAddress.enterBillingAddressDetails(address)
         await checkout.clickProceedToCheckoutBtn();
         await checkout.paymentSection.makePayment('Cash On Delivery');
         await checkout.orderConfirmationSuccessMsg();
         
-        // const orderConfirmationText = await page.locator('#order-confirmation').innerText();
-        // expect(orderConfirmationText).toContain('Thanks for your order! Your invoice number is');
-
     })
-    test("Validate login checkout process", async ({plp,pdp,header,checkout})=>{
+    test.only("Validate login checkout process", async ({plp,pdp,header,checkout})=>{
         
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
@@ -88,17 +86,24 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
-        const email = "customer2@practicesoftwaretesting.com";
+        const email = "customer@practicesoftwaretesting.com";
         const password = "welcome01";
         await checkout.signInSection.loginUser(email,password);
         await checkout.clickProceedToCheckoutBtn();
-        await checkout.billingAddress.enterBillingAddressDetails(
-            "United States of America (the)",
-            "10011",
-            "23"
-        )
+        const address = {
+            country:"India",
+            pincode:"222221",
+            house:"23"
+        }
+        await checkout.billingAddress.enterBillingAddressDetails(address)
         await checkout.clickProceedToCheckoutBtn();
-        await checkout.paymentSection.makePayment('Cash On Delivery');
+        const cardDetails={
+            cardNumber: "1212-1313-1414-1111",
+            expiryDate: "03/2030",
+            cvvNum: "234",
+            cardHolderName: "Jason Mamoa"
+        }
+        await checkout.paymentSection.makePayment('Credit Card',cardDetails);
         await checkout.orderConfirmationSuccessMsg();
     })
 })
