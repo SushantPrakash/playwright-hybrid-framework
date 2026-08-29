@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Tools EShop Test Execution
 on:
   push:
     branches: [ main, master ]

@@ -14,10 +14,10 @@ export class PaymentSection{
     async makePayment(paymentType: string, details?:CreditCardDetails){
         switch(paymentType.toLowerCase()){
             case 'cash on delivery':
-                new CashOnDeliveryPayment(this.page).pay();
+                await new CashOnDeliveryPayment(this.page).pay();
                 break;
             case 'credit card':
-                new CreditCardPayment(this.page, details as CreditCardDetails).pay();
+                await new CreditCardPayment(this.page, details as CreditCardDetails).pay();
                 break;
         }
         await this.confirmPaymentBtn.click();

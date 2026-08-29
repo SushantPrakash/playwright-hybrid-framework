@@ -1,0 +1,34 @@
+# Runs the Playwright test suite in a container.
+#
+#   docker compose up --build            # build the image and run the tests
+#   docker compose run --rm e2e npx playwright test loginTests   # run a subset
+#   docker compose run --rm --service-ports report                # serve the HTML report
+#
+# The bind mounts below write the HTML report and raw results back to the host.
+services:
+  e2e:
+    build:
+      context: .
+      args:
+        PLAYWRIGHT_VERSION: 1.62.1
+    environment:
+      # Enables retries / single worker as configured in playwright.config.ts.
+      CI: "true"
+    # Give Chromium enough shared memory to avoid crashes.
+    shm_size: "1gb"
+    volumes:
+      - ./playwright-report:/usr/src/app/playwright-report
+      - ./test-results:/usr/src/app/test-results
+    command: ["npx", "playwright", "test"]
+
+  # Optional helper service to browse the last HTML report at http://localhost:9323
+  report:
+    build:
+      context: .
+      args:
+        PLAYWRIGHT_VERSION: 1.62.1
+    ports:
+      - "9323:9323"
+    volumes:
+      - ./playwright-report:/usr/src/app/playwright-report
+    command: ["npx", "playwright", "show-report", "--host", "0.0.0.0"]
