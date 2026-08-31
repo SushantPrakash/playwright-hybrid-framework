@@ -74,7 +74,7 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await checkout.orderConfirmationSuccessMsg();
         
     })
-    test.only("Validate login checkout process", async ({plp,pdp,header,checkout})=>{
+    test("Validate login checkout process", async ({plp,pdp,header,checkout})=>{
         
         const productName = "Combination Pliers";
         let itemPrice = await plp.getProductPrice(productName);
