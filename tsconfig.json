@@ -14,7 +14,10 @@
     // "lib": ["esnext"],
     "types": ["node"],
     "paths": {
-      "@fixtures/*": ["./src/fixtures/*"]
+      "@fixtures/*": ["./src/fixtures/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@checkout/*":["./src/pages/checkoutSystem/*"],
+      "@api/*":["./src/api/*"]
     },
     // and npm install -D @types/node
 

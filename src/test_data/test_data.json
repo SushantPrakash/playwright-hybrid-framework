@@ -1,0 +1,17 @@
+{
+    "login_data":{
+        "email": "customer2@practicesoftwaretesting.com",
+        "password":"welcome01"
+    },
+    "address_data":{
+        "country": "United States of America (the)",
+        "postcode": 10011,
+        "house": 45
+    },
+    "credit_card_details":{
+        "cardNumber": "1212-1313-1414-1111",
+        "expiryDate": "03/2030",
+        "cvvNum": "234",
+        "cardHolderName": "Jason Mamoa"
+    }
+}

@@ -1,6 +1,7 @@
 import {expect, type Locator, type Page} from '@playwright/test';
 import { Guest } from './guest.js';
 import { Login } from './checkoutLogin.js';
+import type { GuestUser } from '../../../test_data/guestUser.js';
 
 export class SignInSection{
     readonly page: Page;
@@ -26,12 +27,12 @@ export class SignInSection{
         await this.login.clickLoginBtn();
         await this.login.validateLoginSuccessMsg();
     }
-    async continueAsGuest(email: string, firstName: string, lastName: string){
+    async continueAsGuest(guestUser: GuestUser){
         await this.guestTab.click();
         await this.page.waitForLoadState('networkidle');
         await expect(this.guest.guestEmail).toBeVisible();
-        await this.guest.enterGuestDetails(email, firstName, lastName);
+        await this.guest.enterGuestDetails(guestUser.firstName, guestUser.lastName, guestUser.email);
         await this.guest.clickContinueAsGuest();
-        await this.guest.validateGuestSuccessMsg(email, firstName, lastName);
+        await this.guest.validateGuestSuccessMsg(guestUser.firstName, guestUser.lastName, guestUser.email);
     }
 }

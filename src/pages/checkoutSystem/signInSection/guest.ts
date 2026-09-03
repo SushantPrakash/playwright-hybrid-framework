@@ -18,17 +18,18 @@ export class Guest{
         this.proceedToCheckOut = page.getByRole('button',{name:'Proceed to checkout'});
     }
 
-    async enterGuestDetails(email: string, firstName: string, lastName: string){
-        await this.guestEmail.fill(email);
+    async enterGuestDetails(firstName: string, lastName: string, email: string){
         await this.guestFirstName.fill(firstName);
         await this.guestLastName.fill(lastName);
+        await this.guestEmail.fill(email);
+
     }
 
     async clickContinueAsGuest(){
         await this.guestContinueBtn.click();
     }
 
-    async validateGuestSuccessMsg(email: string, firstName: string, lastName: string){
+    async validateGuestSuccessMsg(firstName: string, lastName: string,email: string){
         await expect(this.page.getByText(`Continuing as guest: ${firstName} ${lastName} (${email})`)).toBeVisible();
     }
 

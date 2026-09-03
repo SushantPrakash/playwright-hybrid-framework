@@ -1,5 +1,8 @@
 import {test, expect} from '@fixtures/base.fixture.js';
 import { faker } from '@faker-js/faker';
+import { GuestUserDetails } from '../../src/test_data/guestUser.js';
+import {AddressAPIClient} from '@api/addressLookupApi.js'
+import test_data from '../../src/test_data/test_data.json' with {type: 'json'};
 
 
 test.describe("Cart and Checkout Test Scenarios",()=>{
@@ -58,17 +61,13 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
-        const firstName = faker.person.firstName();
-        const lastName = faker.person.lastName();
-        const buyerEmail = faker.internet.email({ firstName, lastName });
-        await checkout.signInSection.continueAsGuest(buyerEmail,firstName,lastName);
+        const guestUser = new GuestUserDetails();
+        await checkout.signInSection.continueAsGuest(guestUser.guestUser());
         await checkout.clickProceedToCheckoutBtn();
-        const address = {
-            country:"United States of America (the)",
-            pincode:"10011",
-            house:"23"
-        }
-        await checkout.billingAddress.enterBillingAddressDetails(address)
+        const country = "United States of America (the)";
+        const pincode = 222112;
+        const house = 56;
+        await checkout.billingAddress.enterBillingAddressDetails(country,pincode,house)
         await checkout.clickProceedToCheckoutBtn();
         await checkout.paymentSection.makePayment('Cash On Delivery');
         await checkout.orderConfirmationSuccessMsg();
@@ -86,16 +85,12 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
-        const email = "customer@practicesoftwaretesting.com";
+        const email = "customer2@practicesoftwaretesting.com";
         const password = "welcome01";
         await checkout.signInSection.loginUser(email,password);
         await checkout.clickProceedToCheckoutBtn();
-        const address = {
-            country:"India",
-            pincode:"222221",
-            house:"23"
-        }
-        await checkout.billingAddress.enterBillingAddressDetails(address)
+        const country = "United States of America (the)";
+        await checkout.billingAddress.enterBillingAddressDetails(country,10011,47)
         await checkout.clickProceedToCheckoutBtn();
         const cardDetails={
             cardNumber: "1212-1313-1414-1111",
