@@ -1,14 +1,17 @@
 import {test, expect} from '@fixtures/base.fixture.js';
+import { Setup } from '@utils/constant.js';
+import { getEnv } from '@utils/env.js';
+
 
 test.describe("Login Test Scenarios",()=>{
     test.beforeEach(async ({basePage, header})=>{
-        await basePage.open("https://practicesoftwaretesting.com/");
+        await basePage.open(Setup.UI_BASE_URL);
         await header.goToSignInPage();
 
     })
 
     test("Validate login using valid credentials", async ({page,loginPage})=>{
-        await loginPage.login("customer@practicesoftwaretesting.com","welcome01");
+        await loginPage.login(getEnv('JANE_DOE'), getEnv('PASSWORD'));
         await expect(page.getByTestId('page-title')).toHaveText('My account');
     })
 

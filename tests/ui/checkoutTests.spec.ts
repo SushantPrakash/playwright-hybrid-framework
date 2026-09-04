@@ -1,13 +1,15 @@
 import {test, expect} from '@fixtures/base.fixture.js';
-import { faker } from '@faker-js/faker';
-import { GuestUserDetails } from '../../src/test_data/guestUser.js';
-import {AddressAPIClient} from '@api/addressLookupApi.js'
-import test_data from '../../src/test_data/test_data.json' with {type: 'json'};
+import { GuestUserDetails } from '@test_data/guestUser.js';
+import test_data from '@test_data/test_data.json' with {type: 'json'};
+import { Setup } from '@utils/constant.js';
+import { getEnv } from '@utils/env.js';
+
+
 
 
 test.describe("Cart and Checkout Test Scenarios",()=>{
     test.beforeEach(async ({basePage})=>{
-        await basePage.open("https://practicesoftwaretesting.com/");
+        await basePage.open(Setup.UI_BASE_URL);
     })
 
     test('Add product to Cart', async({plp,pdp,header,checkout})=>{
@@ -64,12 +66,12 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         const guestUser = new GuestUserDetails();
         await checkout.signInSection.continueAsGuest(guestUser.guestUser());
         await checkout.clickProceedToCheckoutBtn();
-        const country = "United States of America (the)";
-        const pincode = 222112;
-        const house = 56;
+        const country = test_data.address_data.country;
+        const pincode = test_data.address_data.postcode;
+        const house = test_data.address_data.house;
         await checkout.billingAddress.enterBillingAddressDetails(country,pincode,house)
         await checkout.clickProceedToCheckoutBtn();
-        await checkout.paymentSection.makePayment('Cash On Delivery');
+        await checkout.paymentSection.makePayment(Setup.COD);
         await checkout.orderConfirmationSuccessMsg();
         
     })
@@ -85,20 +87,21 @@ test.describe("Cart and Checkout Test Scenarios",()=>{
         await header.gotToCart();
         await checkout.cart.validateCorrectProductIsAdded(productName,itemPrice);
         await checkout.clickProceedToCheckoutBtn();
-        const email = "customer2@practicesoftwaretesting.com";
-        const password = "welcome01";
-        await checkout.signInSection.loginUser(email,password);
+        await checkout.signInSection.loginUser(getEnv('JACK_HOWE'), getEnv('PASSWORD'));
         await checkout.clickProceedToCheckoutBtn();
-        const country = "United States of America (the)";
-        await checkout.billingAddress.enterBillingAddressDetails(country,10011,47)
+        await checkout.billingAddress.enterBillingAddressDetails(
+            test_data.address_data.country,
+            test_data.address_data.postcode,
+            test_data.address_data.house
+        )
         await checkout.clickProceedToCheckoutBtn();
         const cardDetails={
-            cardNumber: "1212-1313-1414-1111",
-            expiryDate: "03/2030",
-            cvvNum: "234",
-            cardHolderName: "Jason Mamoa"
+            cardNumber: test_data.credit_card_details.cardNumber,
+            expiryDate: test_data.credit_card_details.expiryDate,
+            cvvNum: test_data.credit_card_details.cvvNum,
+            cardHolderName: test_data.credit_card_details.cardHolderName
         }
-        await checkout.paymentSection.makePayment('Credit Card',cardDetails);
+        await checkout.paymentSection.makePayment(Setup.Credit_Card,cardDetails);
         await checkout.orderConfirmationSuccessMsg();
     })
 })

@@ -1,8 +1,9 @@
 import {test, expect} from '@fixtures/base.fixture.js';
+import { Setup } from '@utils/constant.js';
 
 test.describe("Product Listing Test Scenarios",()=>{
     test.beforeEach(async ({basePage})=>{
-        await basePage.open("https://practicesoftwaretesting.com/");
+        await basePage.open(Setup.UI_BASE_URL);
     })
 
     test("Validate Product grid is displayed", async ({page,plp})=>{

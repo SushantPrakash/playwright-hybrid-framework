@@ -1,8 +1,4 @@
 {
-    "login_data":{
-        "email": "customer2@practicesoftwaretesting.com",
-        "password":"welcome01"
-    },
     "address_data":{
         "country": "United States of America (the)",
         "postcode": 10011,
