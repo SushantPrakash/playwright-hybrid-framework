@@ -1,6 +1,6 @@
 import { expect, request, test} from '@playwright/test';
-import { AddressBuilder } from '../../src/test_data/addressBuilder.js'
-import { Setup } from '../../src/utils/constant.js';
+import { AddressBuilder } from '@test_data/addressBuilder.js'
+import { Setup } from '@utils/constant.js';
 import test_data from '@test_data/test_data.json' with {type: 'json'};
 
 

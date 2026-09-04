@@ -1,10 +1,10 @@
 import { test as base} from '@playwright/test';
-import  { LoginPage } from '../pages/loginPage.js';
-import  { ProductDetailPage } from '../pages/productDetailPage.js';
-import  { ProductListingPage } from '../pages/productListingPage.js';
-import  { HeaderSection } from '../pages/headerSection.js';
-import  { CheckoutPage } from '../pages/checkoutSystem/checkoutPage.js';
-import { BasePage } from '../pages/basePage.js';
+import  { LoginPage } from '@pages/loginPage.js';
+import  { ProductDetailPage } from '@pages/productDetailPage.js';
+import  { ProductListingPage } from '@pages/productListingPage.js';
+import  { HeaderSection } from '@pages/headerSection.js';
+import  { CheckoutPage } from '@pages/checkoutSystem/checkoutPage.js';
+import { BasePage } from '@pages/basePage.js';
 
 type PageFixtures={
     basePage: BasePage;

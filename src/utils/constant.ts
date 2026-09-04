@@ -6,4 +6,5 @@ export class Setup{
     static UI_BASE_URL = "https://practicesoftwaretesting.com/";
     static COD: PayMode = "Cash On Delivery";
     static Credit_Card: PayMode = "Credit Card";
+    static PRODUCT_NAME: string = "Combination Pliers";
 }

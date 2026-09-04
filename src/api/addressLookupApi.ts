@@ -1,9 +1,11 @@
 import { request } from '@playwright/test';
+import { Setup } from '@utils/constant.js';
+
 
 export class AddressAPIClient{
     async getCompleteAddress(country: string, postalCode: number, house: number){
         const apiPostalCodeLookupContext = await request.newContext({
-            baseURL: "https://api.practicesoftwaretesting.com/",
+            baseURL: Setup.API_BASE_URL,
             extraHTTPHeaders:{
                 accept: "application/json"
             }

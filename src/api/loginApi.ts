@@ -1,13 +1,13 @@
 import { request, type APIResponse } from '@playwright/test';
 import path from 'path';
-
+import { Setup } from '@utils/constant.js';
 
 
 export class LoginAPIClient{
     
     async loginAs(userEmail: string, userPassword: string){
         const loginContext = await request.newContext({
-            baseURL: 'https://api.practicesoftwaretesting.com/',
+            baseURL: Setup.API_BASE_URL,
             extraHTTPHeaders:{
                 accept: 'application/json',
             },
